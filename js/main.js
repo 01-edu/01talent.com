@@ -1,7 +1,7 @@
 /* * File: js/main.js
  * Context: Core interactivity scripts for 01Talent website.
  * Includes IntersectionObserver for scroll animations, Mobile navigation toggle,
- * Image Lightbox functionality, News Carousel controls (Infinite), FAQ accordion, and Cookie Banner management.
+ * Image Lightbox functionality, News Carousel controls (Infinite), FAQ accordion, Cookie Banner management, and Navbar Scroll effects.
  */
 
 // --- FAQ Accordion ---
@@ -103,6 +103,22 @@ function closeLightbox(e) {
 // ==========================================================================
 
 document.addEventListener("DOMContentLoaded", function () {
+  // --- Navbar Scroll State ---
+  const nav = document.querySelector("nav");
+  if (nav) {
+    const handleScroll = () => {
+      if (window.scrollY > 20) {
+        nav.classList.add("nav-scrolled");
+      } else {
+        nav.classList.remove("nav-scrolled");
+      }
+    };
+    // Listen for scroll events
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    // Trigger once on load to catch if the user refreshed midway down the page
+    handleScroll();
+  }
+
   // --- Scroll Animations (Reveal) ---
   const observer = new IntersectionObserver(
     (entries) => {
