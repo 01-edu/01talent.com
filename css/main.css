@@ -28,7 +28,7 @@ html {
   --glass-blur: blur(20px) saturate(180%);
 
   /* Spacing */
-  --space-section: 120px;
+  --space-section: 32px;
   --space-xs: 8px;
   --space-sm: 16px;
   --space-md: 24px;
@@ -2459,6 +2459,6 @@ footer .copy {
 /* Large Screens */
 @media (min-width: 1800px) {
   :root {
-    --space-section: 160px;
+    --space-section: 56px;
   }
 }
