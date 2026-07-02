@@ -186,7 +186,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const mobileMenu = document.getElementById("mobileMenu");
   if (hamburger && mobileMenu) {
     const toggleMenu = (open) => {
-      const isOpen = open !== undefined ? open : !mobileMenu.classList.contains("open");
+      const isOpen =
+        open !== undefined ? open : !mobileMenu.classList.contains("open");
       mobileMenu.classList.toggle("open", isOpen);
       hamburger.classList.toggle("open", isOpen);
       hamburger.setAttribute("aria-expanded", isOpen);
