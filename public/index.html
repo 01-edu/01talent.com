@@ -1863,7 +1863,6 @@
         const width = 600;
         const height = 600;
 
-        // Configuration: Using Earth's actual axial tilt and a faster base speed
         const config = {
           speed: 0.25,
           verticalTilt: -23.5,
@@ -1921,15 +1920,16 @@
 
         let rotation = [0, config.verticalTilt, config.horizontalTilt];
         let isDragging = false;
+        let isHovering = false;
         let timer;
 
         d3.json("https://unpkg.com/world-atlas@2/countries-110m.json").then(
           (world) => {
-            const land = topojson.feature(world, world.objects.countries);
+            const land = topojson.feature(world, world.objects.land);
 
             const landPath = landGroup
               .selectAll(".globe-land")
-              .data(land.features)
+              .data(land.features ? land.features : [land]) // Support feature collection or single geometry
               .enter()
               .append("path")
               .attr("class", "globe-land")
@@ -1945,6 +1945,7 @@
               .attr("class", "campus-point")
               .style("cursor", "pointer")
               .on("mouseover", (event, d) => {
+                isHovering = true;
                 tooltip.style("opacity", 1).html(d.name);
               })
               .on("mousemove", (event) => {
@@ -1952,6 +1953,7 @@
                 tooltip.style("left", `${x}px`).style("top", `${y}px`);
               })
               .on("mouseout", () => {
+                isHovering = false;
                 tooltip.style("opacity", 0);
               });
 
@@ -2021,7 +2023,8 @@
             const startAnimation = () => {
               if (timer) timer.stop();
               timer = d3.timer(() => {
-                if (!isDragging) {
+                // Only rotate if not interacting with it
+                if (!isDragging && !isHovering) {
                   rotation[0] += config.speed;
                   renderGlobe();
                 }
