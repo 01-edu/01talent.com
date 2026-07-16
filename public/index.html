@@ -401,7 +401,6 @@
         </div>
       </div>
     </section>
-
     <!-- GLOBAL NETWORK INTERACTIVE GLOBE -->
     <section id="global-network">
       <div class="section-label">Global Presence</div>
@@ -414,7 +413,6 @@
       </p>
       <div class="globe-container reveal" id="globe-viz"></div>
     </section>
-
     <section id="centers">
       <div class="section-label">Offshoring Centers</div>
       <h2>Where our <em>AI-native engineers</em> are trained and deployed.</h2>
@@ -1853,7 +1851,6 @@
         />
       </svg>
     </a>
-
     <!-- D3 Globe Scripts -->
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://unpkg.com/topojson-client@3"></script>
@@ -1861,35 +1858,29 @@
       document.addEventListener("DOMContentLoaded", () => {
         const width = 600;
         const height = 600;
-
         const config = {
           speed: 0.25,
           verticalTilt: -23.44,
           horizontalTilt: 0,
         };
-
         const container = d3.select("#globe-viz");
         const tooltip = container.append("div").attr("class", "globe-tooltip");
         const svg = container
           .append("svg")
           .attr("viewBox", `0 0 ${width} ${height}`)
           .attr("class", "globe-svg");
-
         const projection = d3
           .geoOrthographic()
           .scale(280)
           .translate([width / 2, height / 2])
           .clipAngle(90);
-
         const path = d3.geoPath().projection(projection);
-
         // Water/Sphere outline (Wireframe outer shell)
         svg
           .append("path")
           .datum({ type: "Sphere" })
           .attr("class", "globe-sphere")
           .attr("d", path);
-
         // Graticule (Grid lines)
         const graticule = d3.geoGraticule();
         svg
@@ -1897,10 +1888,8 @@
           .datum(graticule)
           .attr("class", "globe-graticule")
           .attr("d", path);
-
         const landGroup = svg.append("g");
         const pointGroup = svg.append("g");
-
         // Coordinates for Zone01 Centers and Partner Academies
         const campuses = [
           { name: "Zone01 Athens (Greece)", lng: 23.7275, lat: 37.9838 },
@@ -1916,16 +1905,13 @@
           { name: "Tomorrow School (Kazakhstan)", lng: 71.4206, lat: 51.1694 },
           { name: "Ynov (France)", lng: 2.4302, lat: 46.5392 },
         ];
-
         let rotation = [0, config.verticalTilt, config.horizontalTilt];
         let isDragging = false;
         let isHovering = false;
         let timer;
-
         d3.json("https://unpkg.com/world-atlas@2/countries-110m.json").then(
           (world) => {
             const land = topojson.feature(world, world.objects.land);
-
             const landPath = landGroup
               .selectAll(".globe-land")
               .data(land.features ? land.features : [land]) // Support feature collection or single geometry
@@ -1956,18 +1942,28 @@
                 tooltip.style("opacity", 0);
               });
 
-            enterPoints
+            // Add inner points to handle the pop up and pop down CSS scaling independently of map rendering
+            const innerPoints = enterPoints
+              .append("g")
+              .attr("class", "campus-point-inner")
+              .style(
+                "transition",
+                "transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
+              )
+              .style("transform-origin", "0px 0px");
+
+            innerPoints
               .append("circle")
               .attr("class", "globe-point-marker")
               .attr("r", 2);
-            enterPoints
+            innerPoints
               .append("line")
               .attr("class", "globe-point-pin")
               .attr("x1", 0)
               .attr("y1", 0)
               .attr("x2", 15)
               .attr("y2", -20);
-            enterPoints
+            innerPoints
               .append("circle")
               .attr("class", "globe-point-head")
               .attr("cx", 15)
@@ -1989,12 +1985,14 @@
                   : `translate(-100,-100)`;
               });
 
-              // Hide pins on the back of the globe
-              allPoints.style("display", (d) => {
-                const center = projection.invert([width / 2, height / 2]);
-                const dist = d3.geoDistance(center, [d.lng, d.lat]);
-                return dist > 1.57 ? "none" : "block";
-              });
+              // Scale pins up and down based on their visibility across the horizon
+              allPoints
+                .select(".campus-point-inner")
+                .style("transform", (d) => {
+                  const center = projection.invert([width / 2, height / 2]);
+                  const dist = d3.geoDistance(center, [d.lng, d.lat]);
+                  return dist > 1.57 ? "scale(0)" : "scale(1)";
+                });
             };
 
             // Drag behavior
@@ -2015,10 +2013,8 @@
                 isDragging = false;
                 container.style("cursor", "grab");
               });
-
             svg.call(drag);
             container.style("cursor", "grab");
-
             const startAnimation = () => {
               if (timer) timer.stop();
               timer = d3.timer(() => {
@@ -2029,11 +2025,9 @@
                 }
               });
             };
-
             const stopAnimation = () => {
               if (timer) timer.stop();
             };
-
             // Intersection Observer for performance optimization
             const observer = new IntersectionObserver(
               (entries) => {
@@ -2047,7 +2041,6 @@
               },
               { threshold: 0.1 },
             );
-
             observer.observe(document.getElementById("global-network"));
           },
         );
