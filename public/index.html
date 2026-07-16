@@ -410,8 +410,7 @@
         class="section-sub"
         style="margin-left: auto; margin-right: auto; text-align: center"
       >
-        Expanding global network of Zone01 campuses
-        and our partner academies.
+        Expanding global network of Zone01 campuses and partner academies.
       </p>
       <div class="globe-container reveal" id="globe-viz"></div>
     </section>
@@ -1865,7 +1864,7 @@
 
         const config = {
           speed: 0.25,
-          verticalTilt: -23.5,
+          verticalTilt: -23.44,
           horizontalTilt: 0,
         };
 
@@ -1904,18 +1903,18 @@
 
         // Coordinates for Zone01 Centers and Partner Academies
         const campuses = [
-          { name: "Zone01 Athens", lng: 23.7275, lat: 37.9838 },
-          { name: "Zone01 Oujda", lng: -1.9086, lat: 34.6814 },
-          { name: "Zone01 Kisumu", lng: 34.768, lat: -0.0917 },
-          { name: "Zone01 Dakar", lng: -17.4677, lat: 14.7167 },
-          { name: "Zone01 Rouen", lng: 1.0993, lat: 49.4431 },
+          { name: "Zone01 Athens (Greece)", lng: 23.7275, lat: 37.9838 },
+          { name: "Zone01 Oujda (Morocco)", lng: -1.9086, lat: 34.6814 },
+          { name: "Zone01 Kisumu (Kenya)", lng: 34.768, lat: -0.0917 },
+          { name: "Zone01 Dakar (Senegal)", lng: -17.4677, lat: 14.7167 },
+          { name: "Zone01 Rouen (France)", lng: 1.0993, lat: 49.4431 },
           { name: "Reboot01 (Bahrain)", lng: 50.586, lat: 26.2285 },
           { name: "grit:lab (Åland)", lng: 19.9348, lat: 60.0969 },
           { name: "01Founders (UK)", lng: -0.1278, lat: 51.5074 },
           { name: "NextEra (Egypt)", lng: 31.2357, lat: 30.0444 },
           { name: "Learn2Earn (Nigeria)", lng: 3.3792, lat: 6.5244 },
           { name: "Tomorrow School (Kazakhstan)", lng: 71.4206, lat: 51.1694 },
-          { name: "Ynov (France)", lng: 2.3522, lat: 48.8566 },
+          { name: "Ynov (France)", lng: 2.4302, lat: 46.5392 },
         ];
 
         let rotation = [0, config.verticalTilt, config.horizontalTilt];
@@ -1960,7 +1959,7 @@
             enterPoints
               .append("circle")
               .attr("class", "globe-point-marker")
-              .attr("r", 2.5);
+              .attr("r", 2);
             enterPoints
               .append("line")
               .attr("class", "globe-point-pin")
